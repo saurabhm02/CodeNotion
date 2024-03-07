@@ -1,5 +1,5 @@
 const Course = require("../models/Course.model");
-const Tag = require("../models/Tag.model");
+const Category = require("../models/Category.model");
 const User = require("../models/User.model");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 require("dotenv").config();
@@ -9,9 +9,9 @@ const folder_Name = process.env.FOLDER_NAME;
 
 exports.createCourse = async(req, res) => {
   try{
-    const { courseName, courseDescription, WhatYouWillLearn, price, tag  } = req.body;
+    const { courseName, courseDescription, WhatYouWillLearn, price, category  } = req.body;
     const { thumbnail } = req.files.thumbnailImage;
-    if(!courseName || !courseDescription || !WhatYouWillLearn || !price || !tag || !thumbnail ){
+    if(!courseName || !courseDescription || !WhatYouWillLearn || !price || !category || !thumbnail ){
         return res.json({
             success: false,
             message: "All fields are mandatory!, Please fill all the fields",
@@ -30,14 +30,14 @@ exports.createCourse = async(req, res) => {
       });
     }
 
-    // cheeaking givaen tag is valid or not 
+    // cheeaking givaen category is valid or not 
     
-    canst tagDetails = await Tag.findById(tag);
+    const categoryDetails = await Category.findById(category);
 
-    if(!tagDetails){
+    if(!categoryDetails){
       return res.status(404).json({
         success: false,
-        message: "Tag Details not found",
+        message: "category Details not found",
       });
     }
 
@@ -50,10 +50,10 @@ exports.createCourse = async(req, res) => {
     const newCourse = await Course.create({
       courseName,
       courseDescription,
-      instructor: instructorDetails._id;
+      instructor: instructorDetails._id,
       WhatYouWillLearn,
-      Price,
-      tag: tagDetails._id,
+      price,
+      category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
     });
 
@@ -72,12 +72,12 @@ exports.createCourse = async(req, res) => {
 
     // updataing schema of tag
 
-    await Tag.findByIdAndUpdate(tag, { $push: { courses: newCourse._id } });
+    await Category.findByIdAndUpdate(category, { $push: { courses: newCourse._id } });
 
 
     // returtn res
 
-    return .res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "course created succussfully! ",
       data: newCourse,
@@ -104,7 +104,7 @@ exports.getAllCourse = async(req, res) => {
         price: true,
         thumbnail: true,
         instructor: true,
-        ratingAndReviews; true,
+        ratingAndReviews: true,
         studentEnrolled: true, 
       }).populate("instructor")
         .exec();
