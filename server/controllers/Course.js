@@ -9,17 +9,30 @@ const folder_Name = process.env.FOLDER_NAME;
 
 exports.createCourse = async(req, res) => {
   try{
-    const { courseName, courseDescription, WhatYouWillLearn, price, category  } = req.body;
+    const { courseName, courseDescription, whatYouWillLearn, price, tag: _tag, category, status, instructions: _instructions  } = req.body;
     const { thumbnail } = req.files.thumbnailImage;
-    if(!courseName || !courseDescription || !WhatYouWillLearn || !price || !category || !thumbnail ){
+    const userId = req.user.id;
+    const tag = JSON.parse(_tag);
+    const instructions = JSON.parse(_instructions);
+    console.log("tag", tag);
+    console.log("instructions", instructions);
+
+
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag.length || !category || !thumbnail || !instructions.length ){
         return res.json({
             success: false,
             message: "All fields are mandatory!, Please fill all the fields",
         });
     }
 
-    const userId = req.user.id;
-    const instructorDetails = await User.findById(userId);
+    if(!status || status === undefined){
+      status = "Draft"
+    }
+
+
+    const instructorDetails = await User.findById(userId, {
+      accountType: "Instructor",
+    })
 
     console.log("instructor Details: ", instructorDetails);
     
@@ -51,10 +64,13 @@ exports.createCourse = async(req, res) => {
       courseName,
       courseDescription,
       instructor: instructorDetails._id,
-      WhatYouWillLearn,
+      WhatYouWillLearn: whatYouWillLearn,
       price,
+      tag,
       category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
+      status: status,
+      instructions,
     });
 
 
@@ -70,9 +86,11 @@ exports.createCourse = async(req, res) => {
        { new: true },
      );
 
-    // updataing schema of tag
+    // updataing schema of category
 
-    await Category.findByIdAndUpdate(category, { $push: { courses: newCourse._id } });
+    await Category.findByIdAndUpdate({
+      _id:category
+    }, { $push: { courses: newCourse._id } });
 
 
     // returtn res
