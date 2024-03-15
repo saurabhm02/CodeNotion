@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const Profile = require("../models/Profile.model");
 const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
+const { passwordUpdateTemplate } = require("../mail/template/passwordUpdateTemplate");
 require("dotenv").config();
 
 const jwt_Secret = process.env.JWT_SECRET;
@@ -70,7 +71,6 @@ exports.sendOTP = async (req, res) => {
 // Signup controller
 exports.signUp = async (req, res) => {
   try {
-
     // data fetching from request body
     const { firstName,
       lastName,
@@ -232,10 +232,11 @@ exports.login = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const { email, oldPassword, newPassword, cPassword } = req.body;
-
+  
+    const { oldPassword, newPassword, cPassword } = req.body;
+    const userDetails = await User.findById(req.user.id);
     // validating the daeatails
-    if(!email || !oldPassword || !newPassword || !cPassword) {
+    if( !oldPassword || !newPassword || !cPassword) {
       return res.status(403).json({
         success: false,
         message: "All required fields must be provided. Please make sure you've filled out all mandatory fields correctly.",
@@ -250,29 +251,51 @@ exports.changePassword = async (req, res) => {
     }
 
     // retriving the data of user from DB
-    const user = await User.findOne({email});
 
-    if(!user) {
+
+    if(!userDetails) {
       return res.status(401).json({
         success: false,
-        message: "User not found. Please ensure you've registered yourself!.",
+        message: "userDetails not found. Please ensure you've registered yourself!.",
       });
     }
 
     // now verifyiang the old password
-    if(await bcrypt.compare(oldPassword, user.password)) {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = hashedPassword;
-      user.save();
-      return res.status(200).json({
-        success: true,
-        message: "Password changed successfully",
-      })
+    const isPasswordMatch = await bcrypt.compare(oldPassword, userDetails.password); 
+    if(!isPasswordMatch){
+        return res.status(401).json({
+          success: false,
+          message: "old password is incorrect!",
+        });
     }
 
-    const emailBody = "Your password has been successfully changed | you can login with new password";
+    // updating password of user
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    const updatedUserDetails = await User.findByIdAndUpdate(
+      req.user.id,
+      { password: hashPassword },
+      { new: true }
+    );
 
-    await mailSender(email, "Password changed successfully", emailBody);
+    //now after thsi just send the email of password changed
+    try{
+      const emailResponse = await mailSender(
+        updatedUserDetails.email,
+        "Password for yout account has been Changed",
+        passwordUpdateTemplate(
+          updatedUserDetails.email,
+          `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+        )
+      )
+      console.log("Email send success", emailResponse.response);
+    }
+    catch(error){
+      console.error("Error occurred while sending email:", error)
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Error occurred while sending email",
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -280,10 +303,10 @@ exports.changePassword = async (req, res) => {
     })
   }
   catch(error){
-    console.log(error);
+    console.error("Error occurred while updating password:", error);
     return res.status(500).json({
       success: false,
-      message: "Unable to change password. Please try again later.",
+      message: error.message || "Unable to change password. Please try again later.",
     });
   }
-}
+};
