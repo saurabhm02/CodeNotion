@@ -1,5 +1,9 @@
 const Category = require("../models/Category.model");
 
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
+
 exports.createCategory = async(req, res) => {
   try{
     const { name, description } = req.body;
@@ -36,13 +40,13 @@ exports.createCategory = async(req, res) => {
 
 exports.getAllCategories = async(req, res) => {
   try{
-      
-      const allCategories = await Category.find({}, {name:true, description:true});
-      res.status(200).json({
-        success: true,
-        message: "All Categories return successfully!",
-        allCategories,
-      });
+    
+    const allCategories = await Category.find({}, {name:true, description:true});
+    res.status(200).json({
+      success: true,
+      message: "All Categories return successfully!",
+      allCategories,
+    });
   }
   catch(error){
     console.log(error);
@@ -90,19 +94,31 @@ exports.categoryPageDetails = async(req, res) => {
 
     // gett the courses for other categories
 
-    const categoriesExcrptSeclected = await Category.find({
+    const categoriesExceptSeclected = await Category.find({
       _id: {
         $ne: categoryId
       },
     })
 
     let differentCategory = await Category.findOne(
-      categoriesExcrptSeclected[getRandomInt(categoriesExcrptSeclected.lenght)]._id
+      categoriesExceptSeclected[getRandomInt(categoriesExceptSeclected.lenght)]._id
     )
     .populate({
       path: "courses",
       match: { status: "Published"},
     }).exec();
+
+
+     // Get top-selling courses across all categories
+    const allCategories = await Category.find()
+    .populate({
+       path: "courses",
+       match: { status: "Published" },
+       populate: {
+         path: "instructor",
+     },
+    })
+    .exec();
 
     const allCourses = allCategories.findMap((category) => category.courses);
     const mostSellingCourses = allCourses
