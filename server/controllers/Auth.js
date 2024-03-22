@@ -112,7 +112,7 @@ exports.signUp = async (req, res) => {
 
     console.log(recentOtp);
     // validating otp
-    if (recentOtp.length == 0) {
+    if (recentOtp.length === 0) {
       // OTP not found    
       return res.status(400).json({
         success: false,
@@ -131,6 +131,9 @@ exports.signUp = async (req, res) => {
     // hashing the password for security
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    let approved = "";
+    approved === "Instructor" ? (approved = false) : (approved = true);
+    
     // creating entrey ion db
     const profileDetails = await Profile.create({
       gender: null,
@@ -143,6 +146,7 @@ exports.signUp = async (req, res) => {
       firstName,
       lastName,
       email,
+      contactNumber,
       password: hashedPassword,
       accountType,
       aditonalDetails: profileDetails._id,
