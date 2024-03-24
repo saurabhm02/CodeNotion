@@ -1,7 +1,7 @@
 const Section = require("../models/Section.model");
 const Course = require("../models/Course.model");
 
-exports.createSection = async (req, res) => {
+exports.createSection = async(req, res) => {
   try {
     const { sectionName, courseId } = req.body;
     if (!sectionName || !courseId) {
@@ -47,7 +47,7 @@ exports.createSection = async (req, res) => {
 };
 
 
-exports.updateSection = async (req, res) => {
+exports.updateSection = async(req, res) => {
   try {
     const { sectionName, sectionId } = req.body;
 
@@ -82,7 +82,7 @@ exports.updateSection = async (req, res) => {
 };
 
 
-exports.deleteSection = async (req, res) => {
+exports.deleteSection = async(req, res) => {
   try {
     const { sectionId,courseId } = req.params;
 
