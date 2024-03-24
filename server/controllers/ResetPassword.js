@@ -1,4 +1,3 @@
-const { hasUncaughtExceptionCaptureCallback } = require("process");
 const User = require("../models/User.model");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
@@ -17,14 +16,15 @@ exports.resetPasswordToken = async(req, res) =>{
     }
     
     // generating token for instance
-    const token = crypto.randomUUID();
+    // const token = crypto.randomUUID();
+    const token = crypto.randomBytes(20).toString("hex");
 
     // updating user bny adding token and expiration time 
-    const updatedDetails = await.User.findOneAndUpdate(
+    const updatedDetails = await User.findOneAndUpdate(
         {email},
         {
           token: token,
-          resetPasswordExpires = Date.now() + 5 * 60 * 1000,
+          resetPasswordExpires: Date.now() + 5 * 60 * 1000,
         },
         { new: true }
     );
@@ -33,7 +33,11 @@ exports.resetPasswordToken = async(req, res) =>{
     const url = `http://localhost:3000/update-password/${token}`;
 
     // sending mailSender
-    await mailSender(email, "Password Reset Link", `Password Reset Link: ${url}`);
+    await mailSender(
+      email, 
+      "Password Reset Link",
+      `Your Link for email verification is ${url}. Please click this url to reset your password.`
+    );
 
 
     return res.json({
@@ -76,7 +80,7 @@ exports.resetPassword = async(req, res) => {
       }
 
     // checking token time 
-      if(userDetails.resetPasswordExpires < Date.now() ){
+      if(!(userDetails.resetPasswordExpires < Date.now()) ){
         return res.status(403).json({
           success: false,
           message: "Token is expired | please regenerate the token",
@@ -84,7 +88,7 @@ exports.resetPassword = async(req, res) => {
       }
 
     // password hashing
-      const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Updating password
       await User.findOneAndUpdate(
@@ -112,4 +116,5 @@ exports.resetPassword = async(req, res) => {
       success: false,
       message: "facing error while reseting password",
     });
+  }
 }
