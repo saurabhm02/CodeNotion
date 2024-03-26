@@ -20,22 +20,24 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        trim: true,
-    },
-    cPassword: {
-        type: String,
-        required: true,
-        trim: true,
     },
     accountType: {
         type: String,
-        emum: ["student", "instructor", "admin"],
+        emum: ["Student", "Instructor", "Admin"],
         required: true,
     },
-    aditonalDetails: {
+    active: {
+        type: Boolean,
+		default: true,
+    },
+    approved: {
+        type: Boolean,
+        default: true,
+    },
+    additionalDetails: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Profile",
         required: true,
+        ref: "Profile",
     },
     courses: [
         {
@@ -53,12 +55,16 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: {
       type: Date,
     },
+    image: {
+        type: String,
+        required: true,
+    },
     courseProgress: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "CourseProgress",
         }
     ]
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);  
