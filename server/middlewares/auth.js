@@ -41,13 +41,15 @@ exports.auth = async( req, res, next ) => {
 
 exports.isStudent = async(req, res, next) =>{
   try{
-     if(req.user.accountType !== "Student"){
-       return res.status(401).json({
-          success: false,
-          message: "You are not authorized as student  to access this route"
-       });
-     }
-     next();
+    const userDetails = await User.findOne({ email: req.user.email });
+
+    if(userDetails.accountType !== "Student"){
+      return res.status(401).json({
+        success: false,
+        message: "You are not authorized as student  to access this route"
+      });
+    }
+    next();
   }
   catch(error){
      console.log(error);
@@ -61,13 +63,15 @@ exports.isStudent = async(req, res, next) =>{
 
 exports.isInstructor = async(req, res, next) => {
   try{
-     if(req.user.accountType !== "Instructor"){
-        return res.status(401).json({
-          success: false,
-         message: "You are not authorized as Instructor to access this route"
-        });
-     }
-     next();
+    const userDetails = await User.findOne({ email: req.user.email });
+     
+    if(userDetails.accountType !== "Instructor"){
+      return res.status(401).json({
+        success: false,
+        message: "You are not authorized as Instructor to access this route"
+      });
+    }
+    next();
   }
   catch(error){
     console.log(error);
@@ -78,16 +82,18 @@ exports.isInstructor = async(req, res, next) => {
   }
 };
 
-exports.isAdmin = (req, res, next) =>{
+exports.isAdmin = async(req, res, next) =>{
     try{
-        if(req.user.role !== "Admin"){
-            return res.status(401).json({
-                success: false,
-                message: "You are not authorized as Admin  to access this route"
-            });
-        }
+      const userDetails = await User.findOne({ email: req.user.email });
+        
+      if(userDetails.accountType !== "Admin"){
+        return res.status(401).json({
+          success: false,
+          message: "You are not authorized as Admin  to access this route"
+        });
+      }
 
-        next();
+      next();
     } catch(error){
         console.log(error);
         return res.status(401).send({
