@@ -5,8 +5,8 @@ db_Url = process.env.DATABASE_URL;
 
 const dbConnect = ()=>{
     mongoose.connect(db_Url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true
     })
     .then(()=> console.log("Database connected"))
     .catch((error)=>{
