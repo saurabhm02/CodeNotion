@@ -33,7 +33,7 @@ exports.sendOTP = async(req, res) => {
     console.log("Otp generated: ", otp);
 
     // check otp  for its uniqueness
-    const result = await OTP.findOne({ otp });
+    const result = await OTP.findOne({ otp: otp });
     console.log("Result is Generate OTP Func")
     console.log("OTP", otp);
     console.log("Result", result);
@@ -71,7 +71,8 @@ exports.sendOTP = async(req, res) => {
 exports.signUp = async(req, res) => {
   try {
     // data fetching from request body
-    const { firstName,
+    const { 
+      firstName,
       lastName,
       email,
       password,
@@ -107,25 +108,22 @@ exports.signUp = async(req, res) => {
     };
 
     // finsding most recent OTP storted for athe user
-    const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1)
+    console.log("response: ", response);
 
-    console.log(recentOtp);
     // validating otp
-    if (recentOtp.length === 0) {
-      // OTP not found    
+    if (response.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "OTP not found for this email address. Please request a new OTP.",
-      });
-    }
-
-    else if (otp !== recentOtp.otp) {
+        message: "The OTP is not valid",
+      })
+    } else if (otp !== response[0].otp) {
       // Invalid OTP
       return res.status(400).json({
         success: false,
-        message: "Invalid OTP. Please enter the correct OTP.",
-      });
-    };
+        message: "The OTP is not valid",
+      })
+    }
 
     // hashing the password for security
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -147,8 +145,9 @@ exports.signUp = async(req, res) => {
       email,
       contactNumber,
       password: hashedPassword,
-      accountType,
-      aditonalDetails: profileDetails._id,
+      accountType: accountType,
+      approved: approved,
+      additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     });
 
@@ -167,7 +166,6 @@ exports.signUp = async(req, res) => {
   }
 }
 
-
 // login logic
 
 exports.login = async(req, res) => {
@@ -175,14 +173,14 @@ exports.login = async(req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(403).json({
+      return res.status(404).json({
         success: false,
         message: "All required fields must be provided. Please make sure you've filled out all mandatory fields correctly.",
       });
     }
 
     // checking user is exist or not in db
-    const user = await User.findOne({ email }).populate("aditonalDetails");
+    const user = await User.findOne({ email }).populate("additionalDetails");
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -193,14 +191,13 @@ exports.login = async(req, res) => {
     // after matching password , generate JWt
 
     if (await bcrypt.compare(password, user.password)) {
-      const payload = {
-        email: user.email,
-        id: user._id,
-        role: user.accountType,
-      }
-      const token = jwt.sign(payload, jwt_Secret, {
-        expiresIn: "2h",
-      });
+      const token = jwt.sign(
+        { email: user.email, id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "24h",
+        }
+      );
 
       user.token = token;
       user.password = undefined;
@@ -214,6 +211,7 @@ exports.login = async(req, res) => {
         message: "Logged in successfully",
         token,
         user,
+        message: `User Login Success`,
       })
 
     }

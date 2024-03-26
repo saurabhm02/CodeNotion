@@ -5,7 +5,7 @@ const SubSection = require("../models/SubSection.model");
 const User = require("../models/User.model");
 const CourseProgress = require("../models/CourseProgress.model");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
-const { convertSecondsToDuration } = require("../utils/secToDuration");
+const convertSecondsToDuration = require("../utils/secToDuration");
 require("dotenv").config();
 
 const folder_Name = process.env.FOLDER_NAME;
@@ -14,7 +14,7 @@ const folder_Name = process.env.FOLDER_NAME;
 exports.createCourse = async(req, res) => {
   try{
     const { courseName, courseDescription, whatYouWillLearn, price, tag: _tag, category, status, instructions: _instructions  } = req.body;
-    const { thumbnail } = req.files.thumbnailImage;
+    const thumbnail = req.files.thumbnailImage;
     const userId = req.user.id;
     
     const tag = JSON.parse(_tag);
@@ -23,11 +23,11 @@ exports.createCourse = async(req, res) => {
     console.log("instructions", instructions);
 
 
-    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag.length || !category || !thumbnail || !instructions.length ){
-        return res.json({
-            success: false,
-            message: "All fields are mandatory!, Please fill all the fields",
-        });
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag.length || !thumbnail || !category || !instructions.length ){
+      return res.status(400).json({
+        success: false,
+        message: "All fields are mandatory!, Please fill all the fields",
+      });
     }
 
     if(!status || status === undefined){
@@ -69,7 +69,7 @@ exports.createCourse = async(req, res) => {
       courseName,
       courseDescription,
       instructor: instructorDetails._id,
-      WhatYouWillLearn: whatYouWillLearn,
+      whatYouWillLearn: whatYouWillLearn,
       price,
       tag,
       category: categoryDetails._id,
@@ -81,7 +81,7 @@ exports.createCourse = async(req, res) => {
 
     // adding new course to the user schema of instructor
 
-     await User.finByIdAndUpdate(
+     await User.findByIdAndUpdate(
        {_id: instructorDetails._id},
        {
          $push: {
@@ -225,7 +225,7 @@ exports.editCourse = async(req, res) => {
 
 exports.getCourseDetails = async(req, res) =>{
   try{
-    const { courseId } = req.body;
+    const { courseId }  = req.body;
     const courseDetails = await Course.findOne({
       _id: courseId,
     }) 

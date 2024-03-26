@@ -11,14 +11,26 @@ const folder_Name = process.env.FOLDER_NAME;
 
 exports.updateProfile = async(req, res) => {
   try{
-    const{ firstName="", lastName="", gender="", dateOfBirth="", about="", contactNumber="" } = req.body;
+    const {
+      firstName = "",
+      lastName = "",
+      dateOfBirth = "",
+      about = "",
+      contactNumber = "",
+      gender = "",
+    } = req.body;
+
     const id = req.user.id;
 
     //finding profilee
-    const userDetails = await User.findById(id);
-    
-    const profileId = userDetails.aditonalDetails;
-    const profileDetails = await Profile.findById(profileId);
+    const userDetails = await User.findById(id)
+    if (!userDetails.additionalDetails) {
+      return res.status(404).json({
+          success: false,
+          message: "User profile not found",
+      });
+  }
+    const profile = await Profile.findById(userDetails.additionalDetails)
 
     const user = await User.findByIdAndUpdate(id, {
       firstName,
@@ -28,25 +40,25 @@ exports.updateProfile = async(req, res) => {
 
 
     // updating profile in db
-    profileDetails.dateOfBirth = dateOfBirth;
-    profileDetails.about = about;
-    profileDetails.gender = gender;
-    profileDetails.contactNumber = contactNumber; 
+    profile.dateOfBirth = dateOfBirth;
+    profile.about = about;
+    profile.contactNumber = contactNumber;
+    profile.gender = gender;
 
-    await profileDetails.save();
+    await profile.save();
 
-    const updateUserDetails = await User.findById(id)
-    .populate("additionalDetails")
-    .exec();
+    const updatedUserDetails = await User.findById(id)
+      .populate("additionalDetails")
+      .exec()
     
     return res.status(200).json({
       status: true,
       message: "Profile update successfully!",
-      profileDetails,
+      updatedUserDetails,
     });
   }
   catch(error){
-    console.log("error in Profil: ", error);
+    console.log("error in Profile: ", error);
     return res.status(400).json({
       success: false,
       message: "error occurs while updating Profile details, please try again!",
@@ -59,7 +71,8 @@ exports.updateProfile = async(req, res) => {
 exports.deleteAccount = async(req, res) => {
   try{
     const id = req.user.id;
-
+    console.log("Print id in deleteAccount: ", id);
+    
     const userDetails = await User.findById({ _id: id });
 
     if(!userDetails){
@@ -71,9 +84,9 @@ exports.deleteAccount = async(req, res) => {
     
     // deleting profile after getting user detail with uid 
       
-    await Profile.findByIdAndDelete({
-      _id: new mongoose.ObjectId(userDetails.aditonalDetails),
-    });
+    await Profile.findByIdAndDelete(userDetails.userDetails);
+
+    
 
     for(const courseId of userDetails.courses){
       await Course.findByIdAndUpdate(
@@ -89,7 +102,8 @@ exports.deleteAccount = async(req, res) => {
 
     // deleting user aftyer deletng itys profile / additiondetail
 
-    await User.findByIdAndDelete({_id: id});
+    await User.findByIdAndDelete(id);
+
 
     return res.status(200).json({
       success: true,
@@ -110,12 +124,13 @@ exports.getAllUserDetails = async(req, res) => {
     const id = req.user.id;
     
     // validating and get user details
-    const userDetails = await User.findById(id).populate("additiondetail").exec();
+    const userDetails = await User.findById(id).populate("additionalDetails").exec();
     console.log("userDetails: ", userDetails);
 
     return res.status(200).json({
       success: true,
       message: "user Data fetched successfully",
+      userDetails,
     })
   }
   catch(error){

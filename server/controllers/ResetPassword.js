@@ -1,17 +1,19 @@
 const User = require("../models/User.model");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
  
 // resetPassword token
 exports.resetPasswordToken = async(req, res) =>{
   try{
     const { email } = req.body;
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email: email });
     if(!user){
       return res.status(403).json({
         success: false,
-        message: "Your email is not registered with us!",
+        message: `Your email ${email} is not registered with us!`,
       });
     }
     
@@ -28,7 +30,7 @@ exports.resetPasswordToken = async(req, res) =>{
         },
         { new: true }
     );
-
+    console.log("details updated while reseting password", updatedDetails)
     // creating url
     const url = `http://localhost:3000/update-password/${token}`;
 
@@ -59,9 +61,9 @@ exports.resetPasswordToken = async(req, res) =>{
 // reset password
 exports.resetPassword = async(req, res) => {
   try{
-      const { password, cPassword, token } = req.body;
+      const { password, confirmPassword, token } = req.body;
       
-      if(password !== cPassword){
+      if(password !== confirmPassword){
         return res.json({
           success: false,
           message: "password is not matching | plase matcah the password and confirm password",
@@ -80,7 +82,7 @@ exports.resetPassword = async(req, res) => {
       }
 
     // checking token time 
-      if(!(userDetails.resetPasswordExpires < Date.now()) ){
+      if(!(userDetails.resetPasswordExpires > Date.now()) ){
         return res.status(403).json({
           success: false,
           message: "Token is expired | please regenerate the token",
