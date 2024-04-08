@@ -10,6 +10,7 @@ const Home = () => {
   return (
     <div className="relative mx-auto flex flex-col w-11/12 items-center max-w-maxContent ">
          
+      {/* Part 1 */}
       <Link to={"/signup"}>
         <div className="mt-16 p-1 mx-auto rounded-full bg-richblack-800 font-bold text-richblack-25 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none w-fit group">
           <div className="flex items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
@@ -113,6 +114,55 @@ const Home = () => {
           backgroundGradient={<div className="codeblock2 absolute"></div>}
         />
       </div>
+
+
+      {/* Part 2 */} 
+
+
+      <div className="bg-richblack-900 text-pure-greys-5 ">
+        <div className="homepage_bg h-[320px] object-contain">
+          <div className="w-11/12 max-w-maxContent flex flex-col items-center gap-5 mx-auto"> 
+            <div className="lg:h-[150px]"></div>
+            <div className="flex gap-7 text-white">
+                  <Button active={true} linkTo={"/signup"}>
+                      <div className="flex gap-2 items-center">
+                          Explore Full Catlog 
+                          <IoArrowForward/>
+                      </div>
+                  </Button>
+                  <Button active={false} linkTo={"/signup"}> 
+                  <div className="flex gap-2 items-center">
+                      Learn More 
+                      </div>
+                  </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
+          <div className="mb-10 mt-[-100px] flex flex-col justify-between gap-7 lg:mt-20 lg:flex-row lg:gap-0">
+            <div className="text-4xl font-semibold lg:w-[45%] ">
+              Get the skills you need for a{" "}
+              <HighlightText text={"job that is in demand."} />
+            </div>
+
+            
+            <div className="flex flex-col items-start gap-10 lg:w-[40%]">
+              <div className="text-[16px]">
+                The modern CodeNotion is the dictates its own terms. Today, to
+                be a competitive specialist requires more than professional
+                skills.
+              </div>
+              <Button  active={true} linkto={"/signup"}>
+                <div className="">Learn More</div>
+              </Button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
     </div>
   )
 }
