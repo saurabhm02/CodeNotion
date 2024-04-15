@@ -5,6 +5,8 @@ node_modules/
 /.pnp
 .pnp.js
 
+import ("./server/.env")
+server/.env
 *.env
 # testing
 /coverage
