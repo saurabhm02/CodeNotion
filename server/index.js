@@ -43,12 +43,13 @@ app.use("/api/v1/course", courseRoutes);
  
 
 app.get("/", (req, res) => {
-	return res.json({
-		success:true,
-		message:'Your server is up and running....'
-	});
+	// return res.send({
+	// 	success:true,
+	// 	message:'Your server is up and running....'
+	// });
+    res.send("hjkdfjsdjfksdaj")
 });
 
 app.listen(PORT, () => {
-	console.log(`App is running at ${PORT}`)
+	console.log(`http://localhost:${PORT}`)
 });
