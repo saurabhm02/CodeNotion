@@ -81,7 +81,7 @@ router.get("/categoryPageDetails", categoryPageDetails);
 
 
 router.post("/createRating", auth, isStudent, createRating)
-router.get("/getAllRatings", getAllRatings);
+router.get("/getReviews", getAllRatings);
 router.get("/getAverageRating", getAverageRating);
 
 

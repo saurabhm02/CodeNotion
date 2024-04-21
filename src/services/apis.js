@@ -10,6 +10,11 @@ export const endpoints = {
     RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
 }
 
+// RATINGS AND REVIEWS
+export const ratingsEndpoints = {
+    REVIEWS_DETAILS_API: BASE_URL + "/course/getReviews",
+}
+
 // CONTACT-US API
 export const contactusEndpoint = {
     CONTACT_US_API: BASE_URL + "/reach/contact",
