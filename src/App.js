@@ -11,7 +11,10 @@ import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/verifyEmail";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
-
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import PrivateRoute from "./components/core/auth/PrivateRoute";
+import Dashboard from "./pages/Dashboard";
+import Error from "./pages/Error"
 
 const App = () => {
   
@@ -67,6 +70,19 @@ const App = () => {
         <Route path="/about" element={ <About/> } />
 
         <Route path="/contact" element={<ContactUs/>} />
+
+        <Route
+          element={
+            <PrivateRoute>
+              <Dashboard/>
+            </PrivateRoute>
+          }
+        >
+          <Route path="dashboard/my-profile" element={<MyProfile />} />
+          <Route path="*" element={<Error />} />
+          {/* <Route path="dashboard/Settings" element={<Sett />} /> */}
+        </Route>
+        
       </Routes>
     </div>
   )
