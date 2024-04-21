@@ -5,19 +5,13 @@ import HighlightText from "../components/core/HomePage/HighlightText";
 import Button from "../components/core/HomePage/Button";
 import BannerVid from "../assets/Images/banner.mp4"
 import CodeBlocks from "../components/core/HomePage/CodeBlocks";
-import TimelineSection from "../components/core/HomePage/TimeLineSection";
-import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection";
-import InstructorSection from "../components/core/HomePage/InstructorSectionj";
-import Footer from "../components/common/Footer";
-import ExploreMore from "../components/core/HomePage/ExploreMore";
 
 const Home = () => {
   return (
-    <div>
     <div className="relative mx-auto flex flex-col w-11/12 items-center max-w-maxContent ">
          
       {/* Part 1 */}
-      {/* <Link to={"/signup"}>
+      <Link to={"/signup"}>
         <div className="mt-16 p-1 mx-auto rounded-full bg-richblack-800 font-bold text-richblack-25 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none w-fit group">
           <div className="flex items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
             <p>Share your expertise, become an Instructor</p>
@@ -46,16 +40,14 @@ const Home = () => {
         <Button active={false} linkTo={"/signup"}>
           Book a Demo
         </Button>
-      </div> */}
+      </div>
 
-      <div className=" my-10
-      
-       shadow-[10px_-5px_50px_-5px] shadow-blue-100">
+      <div className="mx-14 my-7 shadow-[10px_-5px_50px_-5px] shadow-blue-100">
         <video
           muted
           loop
           autoPlay
-          className="shadow-[20px_20px_rgba(255,255,255)] relative"
+          className="shadow-[20px_20px_rgba(255,255,255)]"
         >
           <source src={BannerVid} type="video/mp4" />
         </video>
@@ -122,8 +114,8 @@ const Home = () => {
           backgroundGradient={<div className="codeblock2 absolute"></div>}
         />
       </div>
-          <ExploreMore/>
-    </div>
+
+
       {/* Part 2 */} 
 
 
@@ -165,24 +157,12 @@ const Home = () => {
                 <div className="">Learn More</div>
               </Button>
             </div>
-          </div>
 
-          <TimelineSection />
-          <LearningLanguageSection/>
-        </div>  
+          </div>
+        </div>
       </div>
 
-       {/* Section 3 / part 3  */}
 
-       <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
-          <InstructorSection/>
-
-          <h1 className="text-center text-4xl font-semibold mt-8">
-            Reviews from other learners
-          </h1>
-       </div>
-
-        <Footer/>
     </div>
   )
 }
