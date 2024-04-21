@@ -62,7 +62,7 @@ exports.createRating = async(req, res) => {
         return res.status(201).json({
             success: true,
             message: "Rating and review created successfully",
-            ratingAndReview: newRating
+            newRating
         });
     }
     catch(err){
@@ -79,7 +79,7 @@ exports.getAllRatings = async(req, res)=>{
         const allReviews = await ratingAndReview.find({})
             .sort({rating: "desc"})
             .populate({
-                 path: "userId",
+                 path: "user",
                  selected: "firstName lastName email image",
             })
             .populate({
@@ -91,7 +91,7 @@ exports.getAllRatings = async(req, res)=>{
         return res.status(200).json({
             success: true,
             message: "All ratings fetched successfully",
-             ratings: allReviews
+            data: allReviews
         });
     }
     catch(error){

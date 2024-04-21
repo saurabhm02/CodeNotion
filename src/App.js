@@ -10,6 +10,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/verifyEmail";
 import About from "./pages/About";
+import ContactUs from "./pages/ContactUs";
 
 
 const App = () => {
@@ -63,12 +64,9 @@ const App = () => {
             </ProtectRoutes>
           }
         />  
-        <Route
-          path="/about"
-          element={ 
-            <About/>
-          }
-        />
+        <Route path="/about" element={ <About/> } />
+
+        <Route path="/contact" element={<ContactUs/>} />
       </Routes>
     </div>
   )
