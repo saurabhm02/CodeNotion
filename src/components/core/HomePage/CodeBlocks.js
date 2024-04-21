@@ -33,10 +33,10 @@ const CodeBlocks = ({
         </div>
 
         {/* Part 2 */}
-        <div className="h-fit code-border flex flex-row py-3 text-[10px] sm:text-sm leading-[18px] sm:leading-6 relative w-[100%] lg:w-[470px] bg-[#282c34]">
+        <div className="h-fit code-border   flex flex-row  text-[10px] sm:text-sm leading-[18px] sm:leading-6 relative w-[100%] lg:w-[470px] ">
             {backgroundGradiant}
 
-            <div className="text-center flex flex-col w-[10%] select-none text-richblack-100 font-inter font-bold ">
+            <div className="text-center flex flex-col w-[10%] select-none text-richblack-100  bg-richblack-700  font-inter font-bold ">
                 <p>1</p>
                 <p>2</p>
                 <p>3</p>
@@ -52,7 +52,7 @@ const CodeBlocks = ({
             </div>
 
             <div
-            className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} pr-1`}>
+            className={`w-[90%] flex flex-col gap-2 font-bold font-mono ${codeColor} bg-richblack-700  pr-1`}>
                 <TypeAnimation
                     sequence={[codeblock, 10000 , ""]}
                     cursor={true}
