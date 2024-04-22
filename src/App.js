@@ -15,6 +15,7 @@ import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/auth/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
 import Error from "./pages/Error"
+import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 
 const App = () => {
   
@@ -81,6 +82,7 @@ const App = () => {
           <Route path="dashboard/my-profile" element={<MyProfile />} />
           <Route path="*" element={<Error />} />
           {/* <Route path="dashboard/Settings" element={<Sett />} /> */}
+          <Route path="dashboard/enrolled-courses" element={<EnrolledCourses />} />
         </Route>
         
       </Routes>
