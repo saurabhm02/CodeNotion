@@ -24,47 +24,47 @@ const Home = () => {
             <IoArrowForward className="text-xl"/>
           </div>
         </div> 
-      </Link>
+      </Link> */}
 
-      <div className="text-4xl text-center font-semibold mt-7">
-        Unlock your potential with 
-        <HighlightText text={"Coding Skills"} />
-      </div>
+      <div className="lg:flex gap-2   justify-around items-center">
+        <div>
+          <div className="text-4xl font-semibold ">
+            Learn to Code with  
+            <HighlightText text={"codeNotion"} />
+          </div>
 
-      <div className="w-[90%] mt-4 text-center text-lg font-bold text-richblack-300 ">
-        With our online coding courses, you can learn at your own pace, from
-        anywhere in the world, and get access to a wealth of resources,
-        including hands-on projects, quizzes, and personalized feedback from
-        instructors.
-      </div>
+          <div className="w-[90%] mt-4  text-lg font-bold text-richblack-300 ">
+            codeNotion is an ed-tech platform that provides interactive coding courses, hands-on projects, and
+            personalized learning experiences to help you become a skilled developer.
+          </div>
 
-      <div className="flex gap-7 mt-8 ">
-        <Button active={true} linkTo={"/signup"}>
-          Learn More
-        </Button>
+          <div className="flex gap-7 mt-8 ">
+            <Button active={true} linkTo={"/signup"}>
+            Get Started
+            </Button>
 
-        <Button active={false} linkTo={"/signup"}>
-          Book a Demo
-        </Button>
-      </div> */}
+            <Button active={false} linkTo={"/signup"}>
+              Learn more
+            </Button>
+          </div>
+        </div>
 
-      <div className=" my-10
-      
-       shadow-[10px_-5px_50px_-5px] shadow-blue-100">
-        <video
-          muted
-          loop
-          autoPlay
-          className="shadow-[20px_20px_rgba(255,255,255)] relative"
-        >
-          <source src={BannerVid} type="video/mp4" />
-        </video>
+        <div className="my-10 ">
+          <video
+            muted
+            loop
+            autoPlay
+            className=" w-[75rem] relative"
+          >
+            <source src={BannerVid} type="video/mp4" />
+          </video>
+        </div>
       </div>
 
      {/* Code Part 1 */}
       <div>
         <CodeBlocks 
-          position={"lg:flex-row"}
+          position={"  lg:flex-row-reverse"}
           heading={
             <div className="text-4xl font-semibold">
               Develop your
@@ -77,12 +77,12 @@ const Home = () => {
           }
           btn1={{
             btnText: "Try it Yourself",
-            link: "/signup",
+            linkTo: "/signup",
             active: true,
           }}
           btn2={{
             btnText: "Learn More",
-            link: "/signup",
+            linkTo: "/signup",
             active: false,
           }}
 
@@ -97,7 +97,7 @@ const Home = () => {
 
       <div>
         <CodeBlocks
-          position={"lg:flex-row-reverse"}
+          position={"lg:flex-row"}
           heading={
             <div className="w-[100%] text-4xl font-semibold lg:w-[50%]">
               Dive 
@@ -109,12 +109,12 @@ const Home = () => {
           }
           btn1={{
             btnText: "Continue Lesson",
-            link: "/signup",
+            linkTo: "/signup",
             active: true,
           }}
           btn2={{
             btnText: "Learn More",
-            link: "/signup",
+            linkTo: "/signup",
             active: false,
           }}
           codeColor={"text-caribbeangreen-100"}
@@ -161,14 +161,14 @@ const Home = () => {
                 be a competitive specialist requires more than professional
                 skills.
               </div>
-              <Button  active={true} linkto={"/signup"}>
+              <Button  active={true} linkTo={"/signup"}>
                 <div className="">Learn More</div>
               </Button>
             </div>
           </div>
 
-          <TimelineSection />
-          <LearningLanguageSection/>
+          {/* <TimelineSection />
+          <LearningLanguageSection/> */}
         </div>  
       </div>
 

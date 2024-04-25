@@ -19,7 +19,7 @@ const CodeBlocks = ({
             </div>
 
             <div className="flex gap-7 mt-7">
-                <Button active={btn1.active} linkTo={btn1.linkTo}>
+                <Button active={btn1.active} linkTo={btn1.linkTo} >
                     <div className="flex gap-2 items-center">
                         {btn1.btnText}
                         <IoArrowForward/>
