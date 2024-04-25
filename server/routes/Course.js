@@ -55,7 +55,7 @@ router.delete("/deleteCourse", auth, isInstructor, deleteCourse); // Deleting a 
 
 router.post("/addSection", auth, isInstructor, createSection); //Adding a Section to a Course
 router.post("/updateSection", auth, isInstructor, updateSection); // updatinga  section
-router.delete("/deleteSection", auth, isInstructor, deleteSection); // Deleting a Section from a Course
+router.post("/deleteSection", auth, isInstructor, deleteSection); // Deleting a Section from a Course
 
 router.post("/addSubSection", auth, isInstructor, createSubSection); // Adding a Sub Section to a Section
 router.post("/updateSubSection", auth, isInstructor, updateSubSection); // Updating a Sub Section
