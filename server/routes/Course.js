@@ -48,8 +48,8 @@ const { updateCourseProgress } = require("../controllers/CourseProgress");
 router.post("/createCourse", auth, isInstructor, createCourse); // Courses can Only be Created by Instructors
 router.get("/getAllCourses", getAllCourses); // Get all Courses
 router.post("/editCourse", auth, isInstructor, editCourse); // Edit Courses
-router.get("/getCourseDetails", getCourseDetails); // Get Details for a Specific Courses
-router.get("/getFullCourseDetails", getFullCourseDetails); // Get Details for a Specific Courses
+router.post("/getCourseDetails", getCourseDetails); // Get Details for a Specific Courses
+router.post("/getFullCourseDetails", auth, getFullCourseDetails); // Get Details for a Specific Courses
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses); //Get all Courses Under a Specific Instructo
 router.delete("/deleteCourse", auth, isInstructor, deleteCourse); // Deleting a Course
 
@@ -59,7 +59,7 @@ router.post("/deleteSection", auth, isInstructor, deleteSection); // Deleting a 
 
 router.post("/addSubSection", auth, isInstructor, createSubSection); // Adding a Sub Section to a Section
 router.post("/updateSubSection", auth, isInstructor, updateSubSection); // Updating a Sub Section
-router.delete("/deleteSubSection", auth, isInstructor, deleteSubSection); // Deleting a Sub Section
+router.post("/deleteSubSection", auth, isInstructor, deleteSubSection); // Deleting a Sub Section
 
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
@@ -71,7 +71,7 @@ router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
 router.post("/createCategory", auth, isAdmin, createCategory);
 router.get("/getAllCategories", getAllCategories);
-router.get("/categoryPageDetails", categoryPageDetails);
+router.get("/getCategoryPageDetails", categoryPageDetails);
 
 
 
